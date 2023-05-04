@@ -11,3 +11,16 @@ export const userState = atom({
   },
   effects_UNSTABLE: [persistAtom],
 });
+
+export const errorState = atom({
+  key: "errorState",
+  default: {
+    isError: false,
+    message: "",
+  },
+});
+
+export const reimbursementState = atom({
+  key: "reimbursementState",
+  default: [],
+});
