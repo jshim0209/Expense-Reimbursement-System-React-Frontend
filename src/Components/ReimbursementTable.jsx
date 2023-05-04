@@ -55,7 +55,7 @@ const ReimbursementTable = () => {
           </TableHead>
           <TableBody>
             {reimbursements.map((reimbursement) => (
-              <StyledTableRow key={reimbursement.name}>
+              <StyledTableRow key={reimbursement.id}>
                 <StyledTableCell>{reimbursement.amount}</StyledTableCell>
                 <StyledTableCell>{reimbursement.timeSubmitted}</StyledTableCell>
                 {!reimbursement.timeResolved ? (
@@ -79,8 +79,8 @@ const ReimbursementTable = () => {
                   </StyledTableCell>
                 )}
 
-                <StyledTableCell>{reimbursement.status.status}</StyledTableCell>
                 <StyledTableCell>{reimbursement.type.type}</StyledTableCell>
+                <StyledTableCell>{reimbursement.status.status}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>

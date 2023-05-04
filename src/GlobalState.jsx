@@ -24,3 +24,8 @@ export const reimbursementState = atom({
   key: "reimbursementState",
   default: [],
 });
+
+export const typeState = atom({
+  key: "typeState",
+  default: [],
+});

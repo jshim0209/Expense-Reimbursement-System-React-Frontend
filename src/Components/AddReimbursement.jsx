@@ -1,0 +1,83 @@
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import { createReimbursement } from "../Services/reimbursement";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { reimbursementState, userState } from "../GlobalState";
+import { getTypes } from "../Services/type";
+
+const AddReimbursement = (props) => {
+  const { open, closeDialog, types, setTypes } = props;
+  const [amount, setAmount] = useState(0.0);
+  const [description, setDescription] = useState("");
+  const [type, setType] = useState("");
+  const user = useRecoilValue(userState);
+  const [reimbursements, setReimbursements] =
+    useRecoilState(reimbursementState);
+
+  useEffect(() => {
+    const getAllTypes = async () => {
+      const data = await getTypes();
+      setTypes(data);
+    };
+    getAllTypes();
+  }, []);
+
+  const handleSubmit = async () => {
+    console.log(type);
+    const response = await createReimbursement(user.id, {
+      amount: amount,
+      description: description,
+      type: type,
+    });
+    setReimbursements([...reimbursements, response]);
+    closeDialog();
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onClose={closeDialog}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle>{"Add new reimbursement request"}</DialogTitle>
+      <DialogContent>
+        <TextField
+          placeholder="Amount"
+          onChange={(e) => setAmount(e.target.value)}
+        />
+        <TextField
+          placeholder="Description"
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <Select
+          value={type}
+          label="Type"
+          onChange={(e) => {
+            setType(e.target.value);
+          }}
+        >
+          {types.map((type) => (
+            <MenuItem key={type.id} value={type.type}>
+              {type.type}
+            </MenuItem>
+          ))}
+        </Select>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleSubmit}>Submit</Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+export default AddReimbursement;
