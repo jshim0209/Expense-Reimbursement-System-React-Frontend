@@ -1,9 +1,7 @@
 import { Fragment, useEffect } from "react";
 import Navbar from "../Components/Navbar";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
-  allStatusesState,
-  allTypesState,
   reimbursementState,
   statusState,
   typeState,
@@ -12,14 +10,24 @@ import {
 import { Navigate } from "react-router-dom";
 import { getAllReimbursements } from "../Services/reimbursement";
 import ReimbursementTable from "../Components/ReimbursementTable";
+import styled from "styled-components";
+
+const Container = styled.div`
+  color: #1ba098;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 100vh;
+`;
 
 const Manager = () => {
   const user = useRecoilValue(userState);
   const setReimbursements = useSetRecoilState(reimbursementState);
-  const [status, setStatus] = useRecoilState(statusState);
-  const [type, setType] = useRecoilState(typeState);
-  const [statuses, setStatuses] = useRecoilState(allStatusesState);
-  const [types, setTypes] = useRecoilState(allTypesState);
+  const status = useRecoilValue(statusState);
+  const type = useRecoilValue(typeState);
+
+  const fullName = user.profile.firstName + " " + user.profile.lastName;
 
   useEffect(() => {
     const getReimbursements = async () => {
@@ -27,7 +35,7 @@ const Manager = () => {
       setReimbursements(data);
     };
     getReimbursements();
-  }, [status, setType]);
+  }, [status, type]);
 
   return (
     <Fragment>
@@ -37,11 +45,10 @@ const Manager = () => {
       {!user.isLoggedIn ? (
         <Navigate replace to="/" />
       ) : (
-        <div>
-          <h1>Hi</h1>
-          <h2>This is Manager Screen</h2>
+        <Container>
+          <h1>Hi {fullName}</h1>
           <ReimbursementTable />
-        </div>
+        </Container>
       )}
     </Fragment>
   );

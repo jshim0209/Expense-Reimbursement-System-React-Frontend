@@ -8,7 +8,6 @@ import {
   userState,
 } from "../GlobalState";
 import {
-  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -22,7 +21,7 @@ import {
   tableCellClasses,
 } from "@mui/material";
 import styled from "@emotion/styled";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect } from "react";
 import { getTypes } from "../Services/type";
 import { getStatuses } from "../Services/status";
 import ManagerStatusTableCell from "./ManagerStatusTableCell";
@@ -31,14 +30,11 @@ import EmployeeStatusTableCell from "./EmployeeStatusTableCell";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     fontSize: 14,
+    // width: "100%",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
   },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  border: "#DEB992 solid 1px",
 }));
 
 const ReimbursementTable = () => {
@@ -68,7 +64,6 @@ const ReimbursementTable = () => {
       <TableContainer
         style={{
           width: "80vw",
-          border: "#DEB992 solid 1px",
           borderRadius: "5px",
           marginTop: "50px",
           marginBottom: "50px",
@@ -76,7 +71,7 @@ const ReimbursementTable = () => {
       >
         <Table>
           <TableHead>
-            <TableRow style={{ border: "#DEB992 solid 1px" }}>
+            <TableRow>
               <StyledTableCell>Amount</StyledTableCell>
               <StyledTableCell>Submitted</StyledTableCell>
               <StyledTableCell>Resolved</StyledTableCell>
@@ -88,16 +83,22 @@ const ReimbursementTable = () => {
                 <FormControl fullWidth>
                   <InputLabel id="type-select-label">Type</InputLabel>
                   <Select
+                    sx={{
+                      boxShadow: "none",
+                      ".MuiOutlinedInput-notchedOutline": { border: 0 },
+                    }}
                     labelId="type-select-label"
                     id="type-select"
                     value={type}
                     label="Type"
                     onChange={(e) => {
                       setType(e.target.value);
+                      console.log(e.target.value);
                     }}
                   >
+                    <MenuItem value={{}}>All</MenuItem>
                     {types.map((type) => (
-                      <MenuItem key={type.id} value={type.type}>
+                      <MenuItem key={type.id} value={type}>
                         {type.type}
                       </MenuItem>
                     ))}
@@ -108,16 +109,22 @@ const ReimbursementTable = () => {
                 <FormControl fullWidth>
                   <InputLabel id="status-select-label">Status</InputLabel>
                   <Select
+                    sx={{
+                      boxShadow: "none",
+                      ".MuiOutlinedInput-notchedOutline": { border: 0 },
+                    }}
                     labelId="status-select-label"
                     id="status-select"
                     value={status}
                     label="Status"
                     onChange={(e) => {
                       setStatus(e.target.value);
+                      console.log(e.target.value);
                     }}
                   >
+                    <MenuItem value={{}}>All</MenuItem>
                     {statuses.map((status) => (
-                      <MenuItem key={status.id} value={status.status}>
+                      <MenuItem key={status.id} value={status}>
                         {status.status}
                       </MenuItem>
                     ))}
@@ -128,7 +135,7 @@ const ReimbursementTable = () => {
           </TableHead>
           <TableBody>
             {reimbursements.map((reimbursement) => (
-              <StyledTableRow key={reimbursement.id}>
+              <TableRow key={reimbursement.id}>
                 <StyledTableCell>{reimbursement.amount}</StyledTableCell>
                 <StyledTableCell>{reimbursement.timeSubmitted}</StyledTableCell>
                 {!reimbursement.timeResolved ? (
@@ -158,7 +165,7 @@ const ReimbursementTable = () => {
                 ) : (
                   <ManagerStatusTableCell reimbursement={reimbursement} />
                 )}
-              </StyledTableRow>
+              </TableRow>
             ))}
           </TableBody>
         </Table>

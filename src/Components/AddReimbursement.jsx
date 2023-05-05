@@ -11,14 +11,15 @@ import {
 import { useEffect, useState } from "react";
 import { createReimbursement } from "../Services/reimbursement";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { reimbursementState, userState } from "../GlobalState";
+import { allTypesState, reimbursementState, userState } from "../GlobalState";
 import { getTypes } from "../Services/type";
 
 const AddReimbursement = (props) => {
-  const { open, closeDialog, types, setTypes } = props;
+  const { open, closeDialog } = props;
   const [amount, setAmount] = useState(0.0);
   const [description, setDescription] = useState("");
   const [type, setType] = useState("Select Type");
+  const [types, setTypes] = useRecoilState(allTypesState);
   const user = useRecoilValue(userState);
   const [reimbursements, setReimbursements] =
     useRecoilState(reimbursementState);
@@ -60,6 +61,12 @@ const AddReimbursement = (props) => {
           onChange={(e) => setDescription(e.target.value)}
         />
         <Select
+          sx={{
+            boxShadow: "none",
+            ".MuiOutlinedInput-notchedOutline": { border: 0 },
+          }}
+          labelId="type-select-label"
+          id="type-select"
           value={type}
           label="Type"
           onChange={(e) => {

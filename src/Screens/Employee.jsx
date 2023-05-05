@@ -1,8 +1,6 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import Navbar from "../Components/Navbar";
 import {
-  allStatusesState,
-  allTypesState,
   reimbursementState,
   statusState,
   typeState,
@@ -14,23 +12,33 @@ import ReimbursementTable from "../Components/ReimbursementTable";
 import { getReimbursementByUserId } from "../Services/reimbursement";
 import { Button } from "@mui/material";
 import AddReimbursement from "../Components/AddReimbursement";
+import styled from "styled-components";
+
+const Container = styled.div`
+  color: #1ba098;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 100vh;
+`;
 
 const Employee = () => {
   const user = useRecoilValue(userState);
   const setReimbursements = useSetRecoilState(reimbursementState);
   const [open, setOpen] = useState(false);
-  const [types, setTypes] = useRecoilState(allTypesState);
-  const [type, setType] = useRecoilState(typeState);
-  const [statuses, setStatuses] = useRecoilState(allStatusesState);
-  const [status, setStatus] = useRecoilState(statusState);
+  const status = useRecoilValue(statusState);
+  const type = useRecoilValue(typeState);
+
+  const fullName = user.profile.firstName + " " + user.profile.lastName;
 
   useEffect(() => {
     const getReimbursementsForUser = async () => {
-      const data = await getReimbursementByUserId(user.id);
+      const data = await getReimbursementByUserId(user.id, status.id, type.id);
       setReimbursements(data);
     };
     getReimbursementsForUser();
-  }, []);
+  }, [status, type]);
 
   const openDialog = () => {
     setOpen(true);
@@ -48,18 +56,12 @@ const Employee = () => {
       {!user.isLoggedIn ? (
         <Navigate replace to="/" />
       ) : (
-        <div>
-          <h1>Hi</h1>
-          <h2>This is employee screen</h2>
+        <Container>
+          <h1>Hi {fullName}</h1>
           <ReimbursementTable />
           <Button onClick={openDialog}>Add Reimbursement</Button>
-          <AddReimbursement
-            open={open}
-            closeDialog={closeDialog}
-            types={types}
-            setTypes={setTypes}
-          />
-        </div>
+          <AddReimbursement open={open} closeDialog={closeDialog} />
+        </Container>
       )}
     </Fragment>
   );
