@@ -1,6 +1,13 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import Navbar from "../Components/Navbar";
-import { reimbursementState, typeState, userState } from "../GlobalState";
+import {
+  allStatusesState,
+  allTypesState,
+  reimbursementState,
+  statusState,
+  typeState,
+  userState,
+} from "../GlobalState";
 import { Navigate } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import ReimbursementTable from "../Components/ReimbursementTable";
@@ -12,7 +19,10 @@ const Employee = () => {
   const user = useRecoilValue(userState);
   const setReimbursements = useSetRecoilState(reimbursementState);
   const [open, setOpen] = useState(false);
-  const [types, setTypes] = useRecoilState(typeState);
+  const [types, setTypes] = useRecoilState(allTypesState);
+  const [type, setType] = useRecoilState(typeState);
+  const [statuses, setStatuses] = useRecoilState(allStatusesState);
+  const [status, setStatus] = useRecoilState(statusState);
 
   useEffect(() => {
     const getReimbursementsForUser = async () => {

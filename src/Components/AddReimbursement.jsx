@@ -18,7 +18,7 @@ const AddReimbursement = (props) => {
   const { open, closeDialog, types, setTypes } = props;
   const [amount, setAmount] = useState(0.0);
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("");
+  const [type, setType] = useState("Select Type");
   const user = useRecoilValue(userState);
   const [reimbursements, setReimbursements] =
     useRecoilState(reimbursementState);

@@ -1,12 +1,22 @@
 import api from "./api";
 
-export const getAllReimbursements = async () => {
-  const response = await api.get("/reimbursements");
+export const getAllReimbursements = async (statusId, typeId) => {
+  const response = await api.get("/reimbursements", {
+    params: {
+      statusId: statusId,
+      typeId: typeId,
+    },
+  });
   return response.data;
 };
 
-export const getReimbursementByUserId = async (userId) => {
-  const response = await api.get(`/reimbursements/${userId}`);
+export const getReimbursementByUserId = async (userId, statusId, typeId) => {
+  const response = await api.get(`/reimbursements/${userId}`, {
+    params: {
+      statusId: statusId,
+      typeId: typeId,
+    },
+  });
   return response.data;
 };
 
