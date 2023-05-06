@@ -8,6 +8,7 @@ import {
   userState,
 } from "../GlobalState";
 import {
+  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -21,16 +22,16 @@ import {
   tableCellClasses,
 } from "@mui/material";
 import styled from "@emotion/styled";
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { getTypes } from "../Services/type";
 import { getStatuses } from "../Services/status";
 import ManagerStatusTableCell from "./ManagerStatusTableCell";
 import EmployeeStatusTableCell from "./EmployeeStatusTableCell";
+import ReceiptDialog from "./ReceiptDialog";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     fontSize: 14,
-    // width: "100%",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -44,6 +45,7 @@ const ReimbursementTable = () => {
   const [status, setStatus] = useRecoilState(statusState);
   const [types, setTypes] = useRecoilState(allTypesState);
   const [statuses, setStatuses] = useRecoilState(allStatusesState);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const getAllTypes = async () => {
@@ -58,6 +60,14 @@ const ReimbursementTable = () => {
     };
     getAllStatuses();
   }, []);
+
+  const openDialog = () => {
+    setOpen(true);
+  };
+
+  const closeDialog = () => {
+    setOpen(false);
+  };
 
   return (
     <Fragment>
@@ -119,7 +129,6 @@ const ReimbursementTable = () => {
                     label="Status"
                     onChange={(e) => {
                       setStatus(e.target.value);
-                      console.log(e.target.value);
                     }}
                   >
                     <MenuItem value={{}}>All</MenuItem>
@@ -147,7 +156,14 @@ const ReimbursementTable = () => {
                 )}
 
                 <StyledTableCell>{reimbursement.description}</StyledTableCell>
-                <StyledTableCell>{reimbursement.receipt}</StyledTableCell>
+                <StyledTableCell>
+                  <Button onClick={openDialog}>View Receipt</Button>
+                  <ReceiptDialog
+                    open={open}
+                    closeDialog={closeDialog}
+                    receiptImage={reimbursement.receipt}
+                  />
+                </StyledTableCell>
                 <StyledTableCell>
                   {reimbursement.author.profile.email}
                 </StyledTableCell>

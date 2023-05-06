@@ -1,15 +1,34 @@
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { typeState, userState } from "../GlobalState";
+import {
+  allTypesState,
+  allStatusesState,
+  userState,
+  reimbursementState,
+  errorState,
+  typeState,
+  statusState,
+} from "../GlobalState";
 import { AppBar, Button, Toolbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const history = useNavigate();
   const [user, setUser] = useRecoilState(userState);
-  const setTypes = useSetRecoilState(typeState);
+  const setStatuses = useSetRecoilState(allStatusesState);
+  const setTypes = useSetRecoilState(allTypesState);
+  const setError = useSetRecoilState(errorState);
+  const setType = useSetRecoilState(typeState);
+  const setStatus = useSetRecoilState(statusState);
+  const setReimbursement = useSetRecoilState(reimbursementState);
 
   const handleLogout = () => {
     setUser({});
+    setError({});
+    setReimbursement([]);
+    setTypes([]);
+    setStatuses([]);
+    setType({});
+    setStatus({});
     localStorage.clear();
     history("/");
   };
@@ -30,16 +49,7 @@ const Navbar = () => {
             }}
           >
             <div>
-              <Button
-                onClick={() => {
-                  setUser({});
-                  setTypes([]);
-                  localStorage.clear();
-                  history("/");
-                }}
-              >
-                Logout
-              </Button>
+              <Button onClick={handleLogout}>Logout</Button>
             </div>
           </Toolbar>
         </AppBar>

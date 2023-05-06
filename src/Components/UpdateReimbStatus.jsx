@@ -7,18 +7,36 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  allStatusesState,
+  reimbursementState,
+  statusState,
+  userState,
+} from "../GlobalState";
 import { useState } from "react";
-import { useRecoilState } from "recoil";
-import { allStatusesState, statusState } from "../GlobalState";
+import { updateReimbursementStatus } from "../Services/reimbursement";
 
 const UpdateReimbStatus = (props) => {
-  const { open, closeDialog, currentStatus } = props;
-  const [status, setStatus] = useState(statusState);
-  const [statuses, setStatuses] = useRecoilState(allStatusesState);
+  const { open, closeDialog, reimbursement } = props;
+  const [status, setStatus] = useState({
+    id: 1,
+    status: "Pending",
+  });
+  const resetStatus = useSetRecoilState(statusState);
+  const user = useRecoilValue(userState);
+  const statuses = useRecoilValue(allStatusesState);
+  const [reimbursements, setReimbursements] =
+    useRecoilState(reimbursementState);
 
   const handleSubmit = async () => {
     console.log(status);
-
+    const response = await updateReimbursementStatus(
+      reimbursement.id,
+      status.id,
+      user.id
+    );
+    resetStatus({});
     closeDialog();
   };
   return (
@@ -44,7 +62,7 @@ const UpdateReimbStatus = (props) => {
           }}
         >
           {statuses.map((status) => (
-            <MenuItem key={status.id} value={status.status}>
+            <MenuItem key={status.id} value={status}>
               {status.status}
             </MenuItem>
           ))}

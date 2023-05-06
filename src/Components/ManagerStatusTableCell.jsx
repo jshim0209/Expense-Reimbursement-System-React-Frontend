@@ -46,7 +46,7 @@ const ManagerStatusTableCell = (props) => {
           <UpdateReimbStatus
             open={open}
             closeDialog={closeDialog}
-            currentStatus={reimbursement.status.status}
+            reimbursement={reimbursement}
           />
         </StyledTableCell>
       )}

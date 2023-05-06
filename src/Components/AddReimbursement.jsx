@@ -11,14 +11,19 @@ import {
 import { useEffect, useState } from "react";
 import { createReimbursement } from "../Services/reimbursement";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { allTypesState, reimbursementState, userState } from "../GlobalState";
+import {
+  allTypesState,
+  reimbursementState,
+  typeState,
+  userState,
+} from "../GlobalState";
 import { getTypes } from "../Services/type";
 
 const AddReimbursement = (props) => {
   const { open, closeDialog } = props;
   const [amount, setAmount] = useState(0.0);
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("Select Type");
+  const [type, setType] = useRecoilState(typeState);
   const [types, setTypes] = useRecoilState(allTypesState);
   const user = useRecoilValue(userState);
   const [reimbursements, setReimbursements] =
@@ -33,13 +38,14 @@ const AddReimbursement = (props) => {
   }, []);
 
   const handleSubmit = async () => {
-    console.log(type);
+    console.log(type.type);
     const response = await createReimbursement(user.id, {
       amount: amount,
       description: description,
       type: type,
     });
     setReimbursements([...reimbursements, response]);
+    setType({});
     closeDialog();
   };
 
@@ -67,14 +73,14 @@ const AddReimbursement = (props) => {
           }}
           labelId="type-select-label"
           id="type-select"
-          value={type}
+          value={type.type}
           label="Type"
           onChange={(e) => {
             setType(e.target.value);
           }}
         >
           {types.map((type) => (
-            <MenuItem key={type.id} value={type.type}>
+            <MenuItem key={type.id} value={type}>
               {type.type}
             </MenuItem>
           ))}

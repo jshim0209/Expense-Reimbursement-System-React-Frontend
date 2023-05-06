@@ -24,3 +24,14 @@ export const createReimbursement = async (userId, reimbRequestDto) => {
   const response = await api.post(`/reimbursements/${userId}`, reimbRequestDto);
   return response.data;
 };
+
+export const updateReimbursementStatus = async (
+  reimbursementId,
+  statusId,
+  resolverId
+) => {
+  const response = await api.patch(
+    `/reimbursements/${reimbursementId}/status/${statusId}/resolver/${resolverId}`
+  );
+  return response.data;
+};
