@@ -75,6 +75,7 @@ const AddReimbursement = (props) => {
           id="type-select"
           value={type.type}
           label="Type"
+          defaultValue={type.type}
           onChange={(e) => {
             setType(e.target.value);
           }}

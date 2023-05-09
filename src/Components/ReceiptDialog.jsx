@@ -15,13 +15,8 @@ const ReceiptDialog = (props) => {
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={closeDialog}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle>{"Receipt Image"}</DialogTitle>
+    <Dialog open={open} onClose={closeDialog}>
+      <DialogTitle>Receipt Image</DialogTitle>
       <DialogContent>
         <img src={receiptImage} alt="receipt" />
       </DialogContent>

@@ -7,13 +7,8 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  allStatusesState,
-  reimbursementState,
-  statusState,
-  userState,
-} from "../GlobalState";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { allStatusesState, statusState, userState } from "../GlobalState";
 import { useState } from "react";
 import { updateReimbursementStatus } from "../Services/reimbursement";
 
@@ -26,11 +21,8 @@ const UpdateReimbStatus = (props) => {
   const resetStatus = useSetRecoilState(statusState);
   const user = useRecoilValue(userState);
   const statuses = useRecoilValue(allStatusesState);
-  const [reimbursements, setReimbursements] =
-    useRecoilState(reimbursementState);
 
   const handleSubmit = async () => {
-    console.log(status);
     const response = await updateReimbursementStatus(
       reimbursement.id,
       status.id,
@@ -57,6 +49,7 @@ const UpdateReimbStatus = (props) => {
           id="type-select"
           value={status}
           label="Type"
+          defaultValue={status}
           onChange={(e) => {
             setStatus(e.target.value);
           }}

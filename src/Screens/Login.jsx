@@ -1,18 +1,31 @@
 import { useRecoilState } from "recoil";
 import { userState } from "../GlobalState";
-import { Button, Input } from "@mui/material";
 import { Fragment, useState } from "react";
 import { login } from "../Services/authentication";
 import { Navigate } from "react-router-dom";
-import Navbar from "../Components/Navbar";
+import SignInSignUpOverlay from "../Components/SignInSignUpOverlay";
+import styled from "styled-components";
+import { signUp } from "../Services/user";
+
+const Container = styled.div`
+  width: 100vw;
+  height: 100vh;
+`;
 
 const Login = () => {
   const [user, setUser] = useRecoilState(userState);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
-  const handleKeyPress = (event) => {
+  const [userInfo, setUserInfo] = useState({
+    username: "",
+    password: "",
+    confirmPassword: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
+  const handleKeyPressLogin = (event) => {
     if (event.key === "Enter") {
       handleLogin();
     }
@@ -41,41 +54,58 @@ const Login = () => {
       });
     }
   };
+
+  const handleKeyPressSignUp = (event) => {
+    if (event.key === "Enter") {
+      handleSignUp();
+    }
+  };
+
+  const handleSignUp = async () => {
+    console.log(userInfo);
+    const response = await signUp({
+      credentials: {
+        username: userInfo.username,
+        password: userInfo.password,
+      },
+      profile: {
+        firstName: userInfo.firstName,
+        lastName: userInfo.lastName,
+        email: userInfo.email,
+      },
+    });
+    console.log(response);
+    setUserInfo({
+      username: "",
+      password: "",
+      confirmPassword: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+    });
+  };
+
   return (
-    <div>
-      <Navbar />
+    <Fragment>
       {!user.isLoggedIn ? (
-        <Fragment>
-          <div>
-            <h1>Hi</h1>
-            <h2>This is login page</h2>
-          </div>
-          <Input
-            onChange={(e) => setUsername(e.target.value)}
-            id="username"
-            label="Username"
-            placeholder="username"
-            type="text"
-            required
-            onKeyPress={handleKeyPress}
+        <Container>
+          <SignInSignUpOverlay
+            setUsername={setUsername}
+            setPassword={setPassword}
+            handleLogin={handleLogin}
+            handleKeyPressLogin={handleKeyPressLogin}
+            userInfo={userInfo}
+            setUserInfo={setUserInfo}
+            handleSignUp={handleSignUp}
+            handleKeyPressSignUp={handleKeyPressSignUp}
           />
-          <Input
-            onChange={(e) => setPassword(e.target.value)}
-            id="password"
-            label="Password"
-            placeholder="password"
-            type="password"
-            required
-            onKeyPress={handleKeyPress}
-          />
-          <Button onClick={handleLogin}>Login</Button>
-        </Fragment>
+        </Container>
       ) : user.manager ? (
         <Navigate replace to="/manager" />
       ) : (
         <Navigate replace to="/employee" />
       )}
-    </div>
+    </Fragment>
   );
 };
 

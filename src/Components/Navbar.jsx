@@ -8,7 +8,18 @@ import {
   typeState,
   statusState,
 } from "../GlobalState";
-import { AppBar, Button, Toolbar } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
@@ -41,34 +52,66 @@ const Navbar = () => {
             variant="dense"
             style={{
               width: "calc(100% - 5px)",
-              background: "#c2ddf0",
               display: "flex",
               justifyContent: "space-between",
-              border: "none",
-              padding: "0",
             }}
           >
-            <div>
-              <Button onClick={handleLogout}>Logout</Button>
-            </div>
+            <Box sx={{ display: { xs: "none", sm: "block" } }}></Box>
+            <List
+              style={{ textAlign: "center" }}
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-end",
+                marginRight: "2rem",
+              }}
+            >
+              <ListItem key={"logout"} sx={{}}>
+                <ListItemButton sx={{}} onClick={handleLogout}>
+                  <ListItemText
+                    style={{ color: "#fff" }}
+                    primaryTypographyProps={{
+                      fontSize: "1.5em",
+                    }}
+                    primary="Logout"
+                  />
+                </ListItemButton>
+              </ListItem>
+            </List>
           </Toolbar>
         </AppBar>
       ) : (
-        <AppBar>
+        <AppBar position="static">
           <Toolbar
             variant="dense"
             style={{
               width: "calc(100% - 5px)",
-              background: "#c2ddf0",
               display: "flex",
               justifyContent: "space-between",
-              border: "none",
-              padding: "0",
             }}
           >
-            <div>
-              <Button>Login</Button>
-            </div>
+            <Box sx={{ display: { xs: "none", sm: "block" } }}></Box>
+            <List
+              style={{ textAlign: "center" }}
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-end",
+                marginRight: "2rem",
+              }}
+            >
+              <ListItem key={"signUp"} sx={{}}>
+                <ListItemButton sx={{}}>
+                  <ListItemText
+                    style={{ color: "#fff" }}
+                    primaryTypographyProps={{
+                      fontSize: "1.5em",
+                    }}
+                    primary="Sign Up"
+                  />
+                </ListItemButton>
+              </ListItem>
+            </List>
           </Toolbar>
         </AppBar>
       )}

@@ -9,10 +9,8 @@ import {
 } from "../GlobalState";
 import {
   Button,
-  FormControl,
-  InputLabel,
+  Menu,
   MenuItem,
-  Select,
   Table,
   TableBody,
   TableCell,
@@ -46,6 +44,24 @@ const ReimbursementTable = () => {
   const [types, setTypes] = useRecoilState(allTypesState);
   const [statuses, setStatuses] = useRecoilState(allStatusesState);
   const [open, setOpen] = useState(false);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorE2, setAnchorE2] = useState(null);
+  const openTypeMenu = Boolean(anchorEl);
+  const openStatusMenu = Boolean(anchorE2);
+  const handleTypeFilter = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const closeTypeMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleStatusFilter = (event) => {
+    setAnchorE2(event.currentTarget);
+  };
+  const closeStatusMenu = () => {
+    setAnchorE2(null);
+  };
 
   useEffect(() => {
     const getAllTypes = async () => {
@@ -89,56 +105,91 @@ const ReimbursementTable = () => {
               <StyledTableCell>Receipt</StyledTableCell>
               <StyledTableCell>Author</StyledTableCell>
               <StyledTableCell>Resolver</StyledTableCell>
+
               <StyledTableCell>
-                <FormControl fullWidth>
-                  <InputLabel id="type-select-label">Type</InputLabel>
-                  <Select
-                    sx={{
-                      boxShadow: "none",
-                      ".MuiOutlinedInput-notchedOutline": { border: 0 },
-                    }}
-                    labelId="type-select-label"
-                    id="type-select"
-                    value={type}
-                    label="Type"
-                    onChange={(e) => {
-                      setType(e.target.value);
-                      console.log(e.target.value);
+                <Button
+                  id="basic-button"
+                  aria-controls={openTypeMenu ? "basic-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={openTypeMenu ? "true" : undefined}
+                  onClick={handleTypeFilter}
+                >
+                  Type
+                </Button>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={openTypeMenu}
+                  onClose={closeTypeMenu}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                >
+                  <MenuItem
+                    value={{}}
+                    onClick={() => {
+                      setType({});
+                      closeTypeMenu();
                     }}
                   >
-                    <MenuItem value={{}}>All</MenuItem>
-                    {types.map((type) => (
-                      <MenuItem key={type.id} value={type}>
-                        {type.type}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                    All
+                  </MenuItem>
+                  {types.map((type) => (
+                    <MenuItem
+                      key={type.id}
+                      value={type}
+                      onClick={() => {
+                        setType(type);
+                        closeTypeMenu();
+                      }}
+                    >
+                      {type.type}
+                    </MenuItem>
+                  ))}
+                </Menu>
               </StyledTableCell>
+
               <StyledTableCell>
-                <FormControl fullWidth>
-                  <InputLabel id="status-select-label">Status</InputLabel>
-                  <Select
-                    sx={{
-                      boxShadow: "none",
-                      ".MuiOutlinedInput-notchedOutline": { border: 0 },
-                    }}
-                    labelId="status-select-label"
-                    id="status-select"
-                    value={status}
-                    label="Status"
-                    onChange={(e) => {
-                      setStatus(e.target.value);
+                <Button
+                  id="basic-button"
+                  aria-controls={openStatusMenu ? "basic-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={openStatusMenu ? "true" : undefined}
+                  onClick={handleStatusFilter}
+                >
+                  Status
+                </Button>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorE2}
+                  open={openStatusMenu}
+                  onClose={closeStatusMenu}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                >
+                  <MenuItem
+                    value={{}}
+                    onClick={() => {
+                      setStatus({});
+                      closeStatusMenu();
                     }}
                   >
-                    <MenuItem value={{}}>All</MenuItem>
-                    {statuses.map((status) => (
-                      <MenuItem key={status.id} value={status}>
-                        {status.status}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                    All
+                  </MenuItem>
+                  {statuses.map((status) => (
+                    <MenuItem
+                      key={status.id}
+                      value={status}
+                      onClick={() => {
+                        setStatus(status);
+                        closeStatusMenu();
+                      }}
+                    >
+                      {status.status}
+                    </MenuItem>
+                  ))}
+                </Menu>
               </StyledTableCell>
             </TableRow>
           </TableHead>
